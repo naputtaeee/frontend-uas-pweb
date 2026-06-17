@@ -11,10 +11,12 @@
           <v-icon icon="mdi-hexagon-multiple" size="40" color="white"></v-icon>
         </v-avatar>
         <h1 class="text-h4 font-weight-black text-primary mb-2">Nabila<span class="text-secondary">Store</span></h1>
-        <p class="text-body-1 text-medium-emphasis font-weight-medium">Login untuk mengelola inventaris toko</p>
+        <p class="text-body-1 text-medium-emphasis font-weight-medium">
+          {{ isRegister ? 'Buat akun baru untuk akses sistem' : 'Login untuk mengelola inventaris toko' }}
+        </p>
       </div>
 
-      <v-form @submit.prevent="handleLogin" v-model="valid">
+      <v-form @submit.prevent="handleAuth" v-model="valid">
         <v-text-field
           v-model="username"
           label="Username Administrator"
@@ -53,9 +55,15 @@
           class="rounded-lg font-weight-bold text-none login-btn mt-2"
           :loading="loading"
         >
-          Masuk ke Dashboard
-          <v-icon icon="mdi-arrow-right" class="ms-2"></v-icon>
+          {{ isRegister ? 'Daftar Sekarang' : 'Masuk ke Dashboard' }}
+          <v-icon :icon="isRegister ? 'mdi-account-plus' : 'mdi-arrow-right'" class="ms-2"></v-icon>
         </v-btn>
+
+        <div class="text-center mt-5">
+          <a href="#" @click.prevent="isRegister = !isRegister; errorMsg = ''" class="text-primary font-weight-bold text-decoration-none">
+            {{ isRegister ? 'Sudah punya akun? Login di sini' : 'Belum punya akun? Buat baru' }}
+          </a>
+        </div>
       </v-form>
       
       <div class="text-center mt-8 pt-4 border-t">
@@ -74,24 +82,34 @@ export default {
   data: () => ({
     valid: false,
     loading: false,
+    isRegister: false,
     showPassword: false,
     username: '',
     password: '',
     errorMsg: ''
   }),
   methods: {
-    async handleLogin() {
+    async handleAuth() {
       if (!this.username || !this.password) return;
       
       this.loading = true;
       this.errorMsg = '';
       try {
-        const res = await axios.post('http://localhost:3000/api/login', {
+        const endpoint = this.isRegister ? '/api/register' : '/api/login';
+        const res = await axios.post(`http://localhost:3000${endpoint}`, {
           username: this.username,
           password: this.password
         });
+        
         localStorage.setItem('token', res.data.token);
-        this.$router.push('/dashboard');
+        
+        if (this.isRegister) {
+          // Kalau register sukses, arahkan ke dashboard
+          this.errorMsg = 'Pendaftaran sukses! Sedang mengalihkan...';
+          setTimeout(() => this.$router.push('/dashboard'), 1000);
+        } else {
+          this.$router.push('/dashboard');
+        }
       } catch (err) {
         this.errorMsg = err.response?.data?.error || 'Kredensial tidak valid. Silakan coba lagi.';
       } finally {
