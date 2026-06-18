@@ -88,7 +88,7 @@ export default {
     password: '',
     errorMsg: ''
   }),
-  methods: {
+ methods: {
     async handleAuth() {
       if (!this.username || !this.password) return;
       
@@ -96,7 +96,8 @@ export default {
       this.errorMsg = '';
       try {
         const endpoint = this.isRegister ? '/api/register' : '/api/login';
-        const res = await axios.post(`http://localhost:3000${endpoint}`, {
+        // Menggunakan variabel lingkungan VITE_API_BASE_URL agar dinamis
+        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${endpoint}`, {
           username: this.username,
           password: this.password
         });
@@ -104,7 +105,6 @@ export default {
         localStorage.setItem('token', res.data.token);
         
         if (this.isRegister) {
-          // Kalau register sukses, arahkan ke dashboard
           this.errorMsg = 'Pendaftaran sukses! Sedang mengalihkan...';
           setTimeout(() => this.$router.push('/dashboard'), 1000);
         } else {

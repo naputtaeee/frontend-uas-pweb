@@ -451,17 +451,18 @@ export default {
       return 'success';
     },
     async fetchData() {
-      this.loading = true;
-      try {
-        const response = await axios.get('https://backend-uas-pweb.vercel.app/api/barang');
-        this.items = response.data;
-      } catch (error) {
-        console.error("Gagal ambil data:", error);
-        this.showSnackbar('Gagal terhubung ke Database', 'error');
-      } finally {
-        this.loading = false;
-      }
-    },
+  this.loading = true;
+  try {
+    // Menggunakan variabel dari .env
+    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/barang`);
+    this.items = response.data;
+  } catch (error) {
+    console.error("Gagal ambil data:", error);
+    this.showSnackbar('Gagal terhubung ke Database', 'error');
+  } finally {
+    this.loading = false;
+  }
+},
     openAddDialog() {
       this.editedItem = Object.assign({}, this.defaultItem);
       this.editedIndex = -1;
