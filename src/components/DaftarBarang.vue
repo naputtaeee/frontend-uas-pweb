@@ -453,7 +453,7 @@ export default {
     async fetchData() {
       this.loading = true;
       try {
-        const response = await axios.get('http://localhost:3000/api/barang');
+        const response = await axios.get('https://backend-uas-pweb.vercel.app/api/barang');
         this.items = response.data;
       } catch (error) {
         console.error("Gagal ambil data:", error);
@@ -480,7 +480,7 @@ export default {
     },
     async deleteItemConfirm() {
       try {
-        await axios.delete(`http://localhost:3000/api/barang/${this.editedItem.id_produk}`);
+        await axios.delete(`https://backend-uas-pweb.vercel.app/api/barang/${this.editedItem.id_produk}`);
         this.items.splice(this.editedIndex, 1);
         this.showSnackbar('Produk berhasil dihapus secara permanen');
       } catch (error) {
@@ -511,7 +511,7 @@ export default {
       this.saving = true;
       try {
         if (this.editedIndex > -1) {
-          await axios.put(`http://localhost:3000/api/barang/${this.editedItem.id_produk}`, {
+          await axios.put(`https://backend-uas-pweb.vercel.app/api/barang/${this.editedItem.id_produk}`, {
             nama_produk: this.editedItem.nama_produk,
             harga: this.editedItem.harga,
             stok: this.editedItem.stok
@@ -519,7 +519,7 @@ export default {
           Object.assign(this.items[this.editedIndex], this.editedItem);
           this.showSnackbar('Data produk berhasil diperbarui');
         } else {
-          const response = await axios.post('http://localhost:3000/api/barang', {
+          const response = await axios.post('https://backend-uas-pweb.vercel.app/api/barang', { 
             nama_produk: this.editedItem.nama_produk,
             harga: this.editedItem.harga,
             stok: this.editedItem.stok
