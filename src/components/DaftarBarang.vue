@@ -4,7 +4,7 @@
     <div class="d-flex flex-column flex-md-row justify-space-between align-start align-md-center mb-8">
       <div class="mb-4 mb-md-0">
         <h1 class="text-h3 font-weight-black text-primary d-flex align-center mb-1">
-          Dashboard Produk
+          NABILA
         </h1>
         <p class="text-body-1 text-medium-emphasis">Pantau analitik dan kelola inventaris toko dengan mudah</p>
       </div>
